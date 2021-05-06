@@ -11,7 +11,7 @@ $ pip install password-smelter
 
 <br>
 
-![password_smelter](https://user-images.githubusercontent.com/20261699/117196051-05535d00-adb4-11eb-8c5b-56f73a3c0fbc.png)
+![password_smelter](https://user-images.githubusercontent.com/20261699/117370076-dc09fe00-ae93-11eb-9703-0c3d4ddef35a.png)
 
 <br>
 

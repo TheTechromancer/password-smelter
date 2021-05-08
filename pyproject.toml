@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "password-smelter"
-version = "1.0.0"
+version = "1.0.1"
 description = "A password analyzer with pretty graphs and a dark mode"
 authors = ["TheTechromancer"]
 license = "GPL-3.0"
@@ -18,7 +18,7 @@ XlsxWriter = "^1.4.0"
 psutil = "^5.8.0"
 tabulate = "^0.8.9"
 numpy = "^1.20.2"
-password-stretcher = "^1.0.0"
+password-stretcher = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 

@@ -125,6 +125,8 @@ class PasswordReport:
 
     def make_html_report(self, show=True):
 
+        print('[+] Generating report')
+
         import dash
         import dash_core_components as dcc
         import dash_html_components as html

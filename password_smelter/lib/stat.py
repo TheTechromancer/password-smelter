@@ -1,6 +1,7 @@
 # by TheTechromancer
 
 import re
+import sys
 import numpy as np
 import pandas as pd
 from math import log, e as euler
@@ -166,6 +167,9 @@ class Stat:
 
         if self._df is None:
 
+            if self.title.strip():
+                print(f'[+] Calculating {self.title}')
+
             df = pd.DataFrame(self.json.items())
             if not df.empty:
                 # sort before dropping takes place
@@ -290,6 +294,8 @@ class PasswordEntropyStat(Stat):
     def df(self):
 
         if self._df is None:
+
+            print(f'[+] Calculating {self.title}')
 
             df = pd.DataFrame([(a, b, c) for ((a,b) ,c) in self._json['coordinates'].items()])
             if not df.empty:
@@ -645,13 +651,7 @@ class PasswordStats:
         for line in iterator:
             if self.options.delimiter:
                 try:
-                    #password = line.split(self.options.delimiter)[self.options.field-1]
-                    try:
-                        password = self.splitter.split(line)
-                        #print(password)
-                    except IndexError:
-                        #print(line)
-                        pass
+                    password = self.splitter.split(line)
                 except IndexError:
                     self.uncracked += 1
                     continue
@@ -661,8 +661,12 @@ class PasswordStats:
             if len(password) > 0:
                 self.cracked += 1
                 self.analyze_password(password)
-            else:
+            elif self.options.delimiter:
                 self.uncracked += 1
+
+            sys.stdout.write(f'\r[+] Read {self.cracked:,} passwords')
+
+        print('')
 
 
     def __getattr__(self, attr):

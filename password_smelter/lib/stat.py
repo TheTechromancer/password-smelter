@@ -16,7 +16,7 @@ from plotly.subplots import make_subplots
 class Splitter:
 
     types = [
-            re.compile(r'^\d+$'),
+            re.compile(r'^-{0,1}\d+$'),
             re.compile(r'^\d+-$'),
             re.compile(r'^\d+-\d+$'),
         ]
@@ -25,16 +25,22 @@ class Splitter:
 
         self.delimiter = str(delimiter)
 
+        self.field1 = 0
         self.field2 = 0
         try:
-            self.field1, self.field2 = field.split('-')
+            self.field1 = int(field)
         except ValueError:
-            self.field1 = field
-        self.field1 = int(self.field1)
-        try:
-            self.field2 = int(self.field2)
-        except ValueError:
-            pass
+            try:
+                field1, field2 = field.split('-', 1)
+                self.field1 = int(field1)
+                self.field2 = int(field2)
+            except ValueError:
+                pass
+
+        if self.field1 > 0:
+            self.field1 -= 1
+        if self.field2 > 0:
+            self.field2 -= 1
 
         self.split_type = self.get_split_type(field)
         if self.split_type == -1:
@@ -51,11 +57,11 @@ class Splitter:
     def split(self, s):
 
         if self.split_type == 0:
-            return s.split(self.delimiter)[self.field1+1]
+            return s.split(self.delimiter)[self.field1]
         elif self.split_type == 1:
-            return self.delimiter.join(s.split(self.delimiter)[self.field1-1:])
+            return self.delimiter.join(s.split(self.delimiter)[self.field1:])
         elif self.split_type == 2:
-            return self.delimiter.join(s.split(self.delimiter)[self.field1-1:self.field2])
+            return self.delimiter.join(s.split(self.delimiter)[self.field1:self.field2])
 
 
 
@@ -652,6 +658,7 @@ class PasswordStats:
             if self.options.delimiter:
                 try:
                     password = self.splitter.split(line)
+                    print(password)
                 except IndexError:
                     self.uncracked += 1
                     continue

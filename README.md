@@ -18,6 +18,9 @@ $ pip install password-smelter
 ## Example: Analyze cracked passwords from hashcat
 ~~~
 $ password-smelter -d: -i <(hashcat --show -m 0 hashes.txt) <(hashcat --left -m 0 hashes.txt)
+
+# if there are usernames
+$ password-smelter -d: -f3- -i cracked.txt left.txt
 ~~~
 
 ## Example: Analyze wordlist from STDIN

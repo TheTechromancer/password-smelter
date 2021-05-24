@@ -59,28 +59,30 @@ class PasswordReport:
         return 'rgba(128,128,128,.3)'
 
 
-    def dump_everything(self, dirname):
-
-        dirname = Path(dirname)
-        dirname.mkdir(exist_ok=True, parents=True)
-        assert dirname.is_dir(), f'Problem with output directory: {dirname}'
-
-        print(f'[+] Outputting passwords to {dirname}')
+    def dump_everything(self, dirname, write=True):
 
         date_str = datetime.now().strftime('%Y%m%d_%H%M%S')
-
-        # excel
-        excel_filename = f'{date_str}_password_analysis.xlsx'
-        self.make_excel_report(dirname / excel_filename)
-
-        # png
-        figures = self.make_html_report(show=False)
         markdown = [f'# {self.options.title}']
         json_data = dict()
 
+        dirname = Path(str(dirname))
+        dirname.mkdir(exist_ok=True, parents=True)
+
+        if write:
+            print(f'[+] Outputting passwords to {dirname}')
+
+            assert dirname.is_dir(), f'Problem with output directory: {dirname}'
+
+            # excel
+            excel_filename = f'{date_str}_password_analysis.xlsx'
+            self.make_excel_report(dirname / excel_filename)
+
+        # png
+        figures = self.make_html_report(show=False)
         fig_dirname = f'{date_str}_password_analysis_images'
-        (dirname / fig_dirname).mkdir(exist_ok=True, parents=True)
-        assert (dirname / fig_dirname).is_dir(), f'Problem with output directory: {fig_dirname}'
+        if write:
+            (dirname / fig_dirname).mkdir(exist_ok=True, parents=True)
+            assert (dirname / fig_dirname).is_dir(), f'Problem with output directory: {fig_dirname}'
 
         kaleido_error = False
         for title, (fig, stat) in figures.items():
@@ -88,25 +90,31 @@ class PasswordReport:
                 fig_filename = f'{title}.png'
                 if title not in ['entropy']:
                     markdown.append(f'## {stat.title}')
-                    markdown.append(f'![{stat.title}]({Path(fig_dirname) / fig_filename})')
+                    if write:
+                        markdown.append(f'![{stat.title}]({Path(fig_dirname) / fig_filename})')
                     markdown.append(stat.df.to_markdown(index=False))
                 json_data[title] = stat.df.to_dict()
-                with open(dirname / fig_dirname / fig_filename, 'wb') as f:
-                    try:
-                        fig.write_image(f, width=1200, height=500, scale=2, engine="kaleido")
-                    except ValueError as e:
-                        if not kaleido_error:
-                            print(f'[!] {str(e).lstrip()}')
-                            kaleido_error = True
+                if write:
+                    with open(dirname / fig_dirname / fig_filename, 'wb') as f:
+                        try:
+                            fig.write_image(f, width=1200, height=500, scale=2, engine="kaleido")
+                        except ValueError as e:
+                            if not kaleido_error:
+                                print(f'[!] {str(e).lstrip()}')
+                                kaleido_error = True
 
-        json_filename = dirname / f'{date_str}_password_analysis.json'
-        with open(json_filename, 'w') as f:
-            json.dump(json_data, f, indent=4)
+        if write:
+            json_filename = dirname / f'{date_str}_password_analysis.json'
+            with open(json_filename, 'w') as f:
+                json.dump(json_data, f, indent=4)
 
         markdown = '\n\n'.join(markdown)
-        markdown_filename = dirname / f'{date_str}_password_analysis.md'
-        with open(markdown_filename, 'w') as f:
-            f.write(markdown)
+
+        if write:
+            markdown_filename = dirname / f'{date_str}_password_analysis.md'
+            with open(markdown_filename, 'w') as f:
+                f.write(markdown)
+
         return markdown
 
 

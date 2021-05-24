@@ -46,7 +46,7 @@ def main():
         options = parser.parse_args()
 
         # print help if there's nothing to analyze
-        if type(options.input) == ReadSTDIN and stdin.isatty():
+        if type(options.input) == ReadSTDIN and sys.stdin.isatty():
             parser.print_help()
             sys.stderr.write('\n\n[!] Please specify password list(s) or pipe to STDIN\n')
             exit(2)
@@ -60,7 +60,9 @@ def main():
 
         if options.output:
             markdown = report.dump_everything(options.output)
-            print(markdown)
+        else:
+            markdown = report.dump_everything(options.output, write=False)
+        print(markdown)
 
         report.make_html_report(show=not options.no_server)
 

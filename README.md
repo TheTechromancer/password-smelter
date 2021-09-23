@@ -5,7 +5,8 @@
 Ingests passwords from hashcat, etc. and outputs to HTML, Markdown, XLSX, PNG, JSON. Dark and light themes supported.
 
 ## Installation
-~~~
+~~~bash
+$ pip install kaleido # for PNG export
 $ pip install password-smelter
 ~~~
 
@@ -16,7 +17,7 @@ $ pip install password-smelter
 <br>
 
 ## Example: Analyze cracked passwords from hashcat
-~~~
+~~~bash
 $ password-smelter -d: -i <(hashcat --show -m 0 hashes.txt) <(hashcat --left -m 0 hashes.txt)
 
 # if there are usernames
@@ -24,12 +25,12 @@ $ password-smelter -d: -f3- -i cracked.txt left.txt
 ~~~
 
 ## Example: Analyze wordlist from STDIN
-~~~
+~~~bash
 $ cat passwords.txt | password-smelter --minlength 8 --mincharsets 2
 ~~~
 
 ## Example: Output to Markdown, XLSX, PNG, JSON
-~~~
+~~~bash
 $ cat passwords.txt | password-smelter -o analyzed_passwords
 
 $ ls -R analyzed_passwords

@@ -164,17 +164,18 @@ class PasswordReport:
         figures = OrderedDict()
         graphs = []
 
+        # cracked / uncracked (sunburst chart)
         if self.stats.uncracked or self.stats.policy:
             fig = self.stats.meta.make_figure(theme=self.plotly_theme)
             figures['overall'] = (fig, self.stats.meta)
-            graphs.append(dcc.Graph(figure=fig))
 
+        # the basic bar charts
         for k in ['passwords', 'basewords', 'mutations', 'numbers', 'symbols']:
             stat = self.stats.overall[k]
             fig = stat.make_figure(theme=self.plotly_theme)
             figures[k] = (fig, stat)
 
-        # everything else
+        # the bar charts with compliant/non-compliant
         for k,stat in [i for i in self.stats.complex.items() if i[0] != 'entropy']:
             if self.stats.noncomplex_counter > 0:
                 figure_data = [

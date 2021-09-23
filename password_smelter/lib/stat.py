@@ -353,6 +353,17 @@ class PasswordMetaStat(Stat):
         self.noncomplex_length = noncomplex_length
         self.total = cracked + uncracked
 
+        self._df = pd.DataFrame(
+            (
+                ('Total', self.total),
+                ('Cracked', self.cracked),
+                ('Uncracked', self.uncracked),
+                ('Compliant', self.complex_count),
+                ('Non-Compliant', self.noncomplex_count),
+            ),
+            columns=('Label', 'Value')
+        )
+
 
     def make_figure(self, *args, **kwargs):
 

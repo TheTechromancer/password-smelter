@@ -669,7 +669,6 @@ class PasswordStats:
             if self.options.delimiter:
                 try:
                     password = self.splitter.split(line)
-                    print(password)
                 except IndexError:
                     self.uncracked += 1
                     continue

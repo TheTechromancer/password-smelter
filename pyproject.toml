@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "password-smelter"
-version = "1.0.6"
+version = "1.0.7"
 description = "A password analyzer with pretty graphs and a dark mode"
 authors = ["TheTechromancer"]
 license = "GPL-3.0"

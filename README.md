@@ -6,8 +6,7 @@ Ingests passwords from hashcat, etc. and outputs to HTML, Markdown, XLSX, PNG, J
 
 ## Installation
 ~~~bash
-$ pip install kaleido # for PNG export
-$ pip install password-smelter
+$ pipx install password-smelter
 ~~~
 
 <br>
